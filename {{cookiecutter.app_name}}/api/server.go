@@ -22,7 +22,7 @@ var (
 	Quit = make(chan os.Signal, 1)
 )
 
-// WebServerFiberRun ...
+// WebServerFiberRun and init middleware cors, recover
 func WebServerFiberRun() {
 	app := fiber.New(fiber.Config{
 		ReadTimeout:  10 * time.Second,
