@@ -17,15 +17,12 @@ func ServerInit(configPath string) {
 	if err != nil {
 		log.Error(err)
 	}
-
 	level, err := log.ParseLevel(config.Conf.Log.Level)
 	if err != nil {
 		log.Error("Cannot parse log level")
 		log.SetLevel(log.InfoLevel)
 	}
-
 	log.Debug("Set log level ", level)
-
 	log.SetLevel(level)
 	log.SetFormatter(&log.TextFormatter{
 		FullTimestamp: true,
