@@ -12,5 +12,5 @@ func Info(c *fiber.Ctx) error {
 		AppName: config.Conf.Core.Lable,
 		Env: config.Conf.Core.Environment,
 	}
-	return c.JSON(fiber.Map{info})
+	return c.JSON(fiber.Map{"info": info})
 }
