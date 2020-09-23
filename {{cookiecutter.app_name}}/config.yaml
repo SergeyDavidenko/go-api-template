@@ -1,0 +1,11 @@
+core:
+  environment: "dev"
+  lable: "{{cookiecutter.app_name}}"
+api:
+  port: ":8088"
+  health_port: ":1499"
+  metric_uri: "/metrics"
+  health_uri: "/healthz"
+log:
+  level: "info"
+  api_level: "warning"

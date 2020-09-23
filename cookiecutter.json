@@ -1,0 +1,10 @@
+{
+    "full_name": "Sergey Davidenko",
+    "github_username": "SergeyDavidenko",
+    "app_name": "mygolangproject",
+    "project_short_description": "A Golang project.",
+    "docker_hub_username": "sergeydavidenko",
+    "docker_build_image_version": ["1.15", "1.14"],
+    "use_docker": "y",
+    "use_git": "y"
+}
