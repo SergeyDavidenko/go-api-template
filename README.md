@@ -4,6 +4,10 @@ First, install requirements
 ```console
 $ pip install -r requirements.txt
 ```
+On Ubuntu:
+```console
+sudo apt install cookiecutter
+```
 
 Finally, to run it based on this template, type:
 ```console
