@@ -9,7 +9,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// ServerInit ...
+// ServerInit init vars, config and log level
 func ServerInit(configPath string) {
 	var err error
 	signal.Notify(api.Quit, syscall.SIGINT, syscall.SIGTERM)
