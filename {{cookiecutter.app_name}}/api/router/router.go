@@ -10,7 +10,7 @@ import (
 
 // SetupRoutes setup router api
 func SetupRoutes(app *fiber.App) {
-	app.Get("/info", handler.CreateEvent)
+	app.Get("/info", handler.Info)
 }
 
 // SetupRoutesHealtz setup router

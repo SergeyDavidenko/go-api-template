@@ -7,5 +7,5 @@ import (
 
 // Info func
 func Info(c *fiber.Ctx) error {
-	return c.JSON(fiber.Map{"info": config.Core.Lable, "env": config.Core.Environment})
+	return c.JSON(fiber.Map{"info": config.Conf.Core.Lable, "env": config.Conf.Core.Environment})
 }
