@@ -3,6 +3,7 @@ package postgresql
 import (
 	"time"
 
+	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/config"
 	"github.com/jackc/pgx"
 	"github.com/jackc/pgx/stdlib"
 	"github.com/jmoiron/sqlx"
@@ -24,11 +25,11 @@ func New() *Storage {
 func (s *Storage) Init() error {
 	// First set up the pgx connection pool
 	connConfig := pgx.ConnConfig{
-		Host:     "localhost",
-		Database: "test",
-		Password: "secret",
-		User:     "go",
-		Port:     5432,
+		Host:     config.Conf.Storage.Host,
+		Database: config.Conf.Storage.Database,
+		Password: config.Conf.Storage.Password,
+		User:     config.Conf.Storage.Username,
+		Port:     config.Conf.Storage.Port,
 	}
 	connPool, err := pgx.NewConnPool(pgx.ConnPoolConfig{
 		ConnConfig:     connConfig,
