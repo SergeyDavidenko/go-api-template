@@ -16,9 +16,9 @@ def remove_file(filename):
     """
     generic remove file from project dir
     """
-    fullpath = os.path.join(PROJECT_DIRECTORY, filename)
-    if os.path.exists(fullpath):
-        os.remove(fullpath)
+    shutil.rmtree(os.path.join(
+        PROJECT_DIRECTORY, "storage"
+    ))
 
 
 def init_git():
