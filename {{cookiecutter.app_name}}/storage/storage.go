@@ -1,12 +1,9 @@
 package storage
 
-
-
 var (
 	// StorageDB ...
 	StorageDB Storage
 )
-
 
 // Storage interface
 type Storage interface {

@@ -28,7 +28,7 @@ func (s *Storage) Init() error {
 		Database: "test",
 		Password: "secret",
 		User:     "go",
-		Port: 5432,
+		Port:     5432,
 	}
 	connPool, err := pgx.NewConnPool(pgx.ConnPoolConfig{
 		ConnConfig:     connConfig,
@@ -51,7 +51,7 @@ func (s *Storage) Init() error {
 }
 
 // ShowVersion postgersql
-func (s *Storage) ShowVersion() string{
+func (s *Storage) ShowVersion() string {
 	var version string
 	err := s.db.Select(&version, sqlShowPostgresqlVersion)
 	if err != nil {
