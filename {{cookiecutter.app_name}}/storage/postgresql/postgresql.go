@@ -46,6 +46,10 @@ func (s *Storage) Init() error {
 	// Then set up sqlx and return the created DB reference
 	nativeDB := stdlib.OpenDBFromPool(connPool)
 	s.db = sqlx.NewDb(nativeDB, "pgx")
+	errCheckConnect := s.db.Ping()
+	if errCheckConnect != nil {
+		return err
+	}
 	return nil
 }
 

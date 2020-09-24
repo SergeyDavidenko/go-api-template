@@ -9,3 +9,11 @@ api:
 log:
   level: "info"
   api_level: "warning"
+{% if cookiecutter.use_postgresql == "y" %}
+storage:
+  host: "localhost"
+  username: "go"
+  password: "go"
+  database: "{{cookiecutter.app_name}}"
+  port: 5432
+{% endif %}
