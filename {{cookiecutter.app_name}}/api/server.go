@@ -14,6 +14,9 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/pprof"
 	"github.com/gofiber/fiber/v2/middleware/recover"
+	{% if cookiecutter.use_postgresql == "y" %}
+	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/storage"
+	{% endif %}
 	log "github.com/sirupsen/logrus"
 )
 
@@ -63,5 +66,8 @@ func WebServerFiberRun() {
 	if err := app.Shutdown(); err != nil {
 		log.Fatal("Server shutdown: ", err)
 	}
+	{% if cookiecutter.use_postgresql == "y" %}
+	storage.StorageDB.Close()
+	{% endif %}
 	log.Info("Server exiting")
 }

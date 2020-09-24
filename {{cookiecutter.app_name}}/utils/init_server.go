@@ -6,6 +6,10 @@ import (
 
 	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/api"
 	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/config"
+	{% if cookiecutter.use_postgresql == "y" %}
+	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/storage"
+	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/storage/postgresql"
+	{% endif %}
 	log "github.com/sirupsen/logrus"
 )
 
@@ -27,4 +31,11 @@ func ServerInit(configPath string) {
 	log.SetFormatter(&log.TextFormatter{
 		FullTimestamp: true,
 	})
+	{% if cookiecutter.use_postgresql == "y" %}
+	storage.StorageDB = postgresql.New()
+	errInitDB := storage.StorageDB.Init()
+	if errInitDB != nil {
+		log.Fatal(errInitDB)
+	}
+	{% endif %}
 }

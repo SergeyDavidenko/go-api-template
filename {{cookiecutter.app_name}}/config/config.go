@@ -23,6 +23,14 @@ api:
 log:
   level: "info"
   api_level: "warning"
+{% if cookiecutter.use_postgresql == "y" %}
+storage:
+  host: "localhost"
+  username: "go"
+  password: "go"
+  database: "{{cookiecutter.app_name}}"
+  port: 5432
+{% endif %}
 `)
 
 // ConfYaml is config structure.
@@ -30,6 +38,9 @@ type ConfYaml struct {
 	Core          SectionCore          `yaml:"core"`
 	API           SectionAPI           `yaml:"api"`
 	Log           SectionLog           `yaml:"log"`
+	{% if cookiecutter.use_postgresql == "y" %}
+	Storage       SectionStorage       `yaml:"storage"`
+	{% endif %}
 }
 
 // SectionCore is sub section of config.
@@ -51,7 +62,16 @@ type SectionLog struct {
 	Level    string `yaml:"level"`
 	APILevel string `yaml:"api_level"`
 }
-
+{% if cookiecutter.use_postgresql == "y" %}
+// SectionStorage for work with database
+type SectionStorage struct {
+	Host string `yaml:"host"`
+	Username string `yaml:"username"`
+	Password string `yaml:"password"`
+	Port uint16 `yaml:"port"`
+	Database string `yaml:"database"`
+}
+{% endif %}
 
 // LoadConf load config from file and read in environment variables that match
 func LoadConf(confPath string) (ConfYaml, error) {
@@ -86,7 +106,7 @@ func LoadConf(confPath string) (ConfYaml, error) {
 		}
 	}
 
-	// Core
+	//Core
 	conf.Core.Environment = viper.GetString("core.environment")
 	conf.Core.Lable = viper.GetString("core.lable")
 
@@ -100,6 +120,14 @@ func LoadConf(confPath string) (ConfYaml, error) {
 	conf.Log.Level = viper.GetString("log.level")
 	conf.Log.APILevel = viper.GetString("log.api_level")
 
+	{% if cookiecutter.use_postgresql == "y" %}
+	//Storage
+	conf.Storage.Host =  viper.GetString("storage.string")
+	conf.Storage.Username =  viper.GetString("storage.username")
+	conf.Storage.Password =  viper.GetString("storage.password")
+	conf.Storage.Database =  viper.GetString("storage.database")
+	conf.Storage.Port =  uint16(viper.GetUint("storage.port"))
+	{% endif %}
 
 	return conf, nil
 }

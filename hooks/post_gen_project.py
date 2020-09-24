@@ -36,8 +36,22 @@ def init_git():
         git.wait()
 
 
+def remove_storage_files():
+    """
+    Removes files needed for storage
+    """
+    for filename in ["storage",]:
+        os.remove(os.path.join(
+            PROJECT_DIRECTORY, filename
+        ))
+
+
 # Initialize Git (should be run after all file have been modified or deleted)
 if '{{ cookiecutter.use_git }}'.lower() == 'y':
     init_git()
 else:
     remove_file(".gitignore")
+
+# Remove storage
+if '{{ cookiecutter.use_postgresql }}'.lower() != 'y':
+    remove_storage_files()
