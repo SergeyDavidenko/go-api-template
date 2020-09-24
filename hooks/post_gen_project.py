@@ -16,9 +16,9 @@ def remove_file(filename):
     """
     generic remove file from project dir
     """
-    shutil.rmtree(os.path.join(
-        PROJECT_DIRECTORY, "storage"
-    ))
+    fullpath = os.path.join(PROJECT_DIRECTORY, filename)
+    if os.path.exists(fullpath):
+        os.remove(fullpath)
 
 
 def init_git():
@@ -40,10 +40,9 @@ def remove_storage_files():
     """
     Removes files needed for storage
     """
-    for filename in ["storage",]:
-        os.remove(os.path.join(
-            PROJECT_DIRECTORY, filename
-        ))
+    shutil.rmtree(os.path.join(
+        PROJECT_DIRECTORY, "storage"
+    ))
 
 
 # Initialize Git (should be run after all file have been modified or deleted)
