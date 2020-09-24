@@ -7,9 +7,6 @@ import (
 	"github.com/jackc/pgx/stdlib"
 	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
-	{% if cookiecutter.use_postgresql == "y" %}
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/storage"
-	{% endif %}
 	log "github.com/sirupsen/logrus"
 )
 
