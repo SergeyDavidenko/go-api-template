@@ -7,18 +7,21 @@ import (
 	"github.com/jackc/pgx/stdlib"
 	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
+	{% if cookiecutter.use_postgresql == "y" %}
+	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/storage"
+	{% endif %}
 	log "github.com/sirupsen/logrus"
 )
 
-// DB ...
-var DB *sqlx.DB
-
+// Storage is interface structure
+type Storage struct {
+	db *sqlx.DB
+}
 
 // New func implements the storage interface
 func New() *Storage {
 	return &Storage{}
 }
-
 
 // Init client storage.
 func (s *Storage) Init() error {
@@ -42,16 +45,14 @@ func (s *Storage) Init() error {
 
 	// Then set up sqlx and return the created DB reference
 	nativeDB := stdlib.OpenDBFromPool(connPool)
-
-	DB = sqlx.NewDb(nativeDB, "pgx")
+	s.db = sqlx.NewDb(nativeDB, "pgx")
 	return nil
 }
 
 // ShowVersion postgersql
 func (s *Storage) ShowVersion() string{
-	db := DB
 	var version string
-	err := db.Select(&version, sqlShowPostgresqlVersion)
+	err := s.db.Select(&version, sqlShowPostgresqlVersion)
 	if err != nil {
 		log.Error(err)
 		return ""
@@ -59,9 +60,8 @@ func (s *Storage) ShowVersion() string{
 	return version
 }
 
-
 // Close the storage connection
 func (s *Storage) Close() error {
-	err := DB.Close()
+	err := s.db.Close()
 	return err
 }

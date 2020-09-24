@@ -67,7 +67,12 @@ func WebServerFiberRun() {
 		log.Fatal("Server shutdown: ", err)
 	}
 	{% if cookiecutter.use_postgresql == "y" %}
-	storage.StorageDB.Close()
+	errClose := storage.StorageDB.Close()
+	if errClose != nil {
+		log.Error(errClose)
+	} else {
+		log.Info("Close database success")
+	}
 	{% endif %}
 	log.Info("Server exiting")
 }

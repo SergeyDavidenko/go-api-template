@@ -65,10 +65,10 @@ type SectionLog struct {
 {% if cookiecutter.use_postgresql == "y" %}
 // SectionStorage for work with database
 type SectionStorage struct {
-	Host string `yaml:"host"`
+	Host     string `yaml:"host"`
 	Username string `yaml:"username"`
 	Password string `yaml:"password"`
-	Port uint16 `yaml:"port"`
+	Port     uint16 `yaml:"port"`
 	Database string `yaml:"database"`
 }
 {% endif %}
