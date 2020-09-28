@@ -13,6 +13,7 @@ import (
 // Cache is interface structure
 type Cache struct {
 	rdb *redis.Client
+	rdbC *redis.ClusterClient
 	ctx context.Context
 }
 
@@ -26,6 +27,13 @@ func (c *Cache) Init() error {
 	redisHost := fmt.Sprintf("%s:%d", config.Conf.Storage.RedisHost, config.Conf.Storage.RedisPort)
 	log.Debug("redis host is - ", redisHost)
 	c.ctx = context.Background()
+	if config.Conf.Storage.RedisCluster {
+		c.rdbC = redis.NewClusterClient(&redis.ClusterOptions{
+			Addrs: []string{redisHost},
+		})
+		_, err := c.rdbC.Ping(c.ctx).Result()
+		return err
+	}
 	c.rdb = redis.NewClient(&redis.Options{
 		Addr:     redisHost,
 		Password: config.Conf.Storage.RedisPassrod,
@@ -43,6 +51,13 @@ func (c *Cache) Close() error {
 
 // Get ...
 func (c *Cache) Get(key string) (interface{}, error) {
+	if config.Conf.Storage.RedisCluster {
+		val, err := c.rdbC.Get(c.ctx, key).Result()
+		if err != nil {
+			return "", err
+		}
+		return val, nil
+	}
 	val, err := c.rdb.Get(c.ctx, key).Result()
 	if err != nil {
 		return "", err
@@ -52,6 +67,10 @@ func (c *Cache) Get(key string) (interface{}, error) {
 
 // Set ...
 func (c *Cache) Set(key string, value interface{}, durations time.Duration) error {
-	err := c.rdb.Set(c.ctx, key, "value", durations).Err()
+	if config.Conf.Storage.RedisCluster {
+		err := c.rdbC.Set(c.ctx, key, value, durations).Err()
+		return err
+	}
+	err := c.rdb.Set(c.ctx, key, value, durations).Err()
 	return err
 }

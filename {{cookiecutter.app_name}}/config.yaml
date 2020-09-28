@@ -17,6 +17,7 @@ storage:
   database: "{{cookiecutter.app_name}}"
   port: 5432 {% endif %}
 {% if cookiecutter.use_redis == "y" %}
+  redis_cluster: false
   redis_host: "localhost"
   redis_db: 0
   redis_port: 6379

@@ -80,7 +80,8 @@ type SectionStorage struct {
 	RedisHost    string `yaml:"redis_host"`
 	RedisPort    int    `yaml:"redis_port"`
 	RedisDB      int    `yaml:"redis_db"`
-	RedisPassrod string `yam:"redis_password"`
+	RedisPassrod string `yaml:"redis_password"`
+	RedisCluster bool   `yaml:"redis_cluster"`
 	{% endif %}
 }
 {% endif %}
@@ -144,6 +145,7 @@ func LoadConf(confPath string) (ConfYaml, error) {
 	conf.Storage.RedisPort = viper.GetInt("storage.redis_port")
 	conf.Storage.RedisDB = viper.GetInt("storage.redis_db")
 	conf.Storage.RedisPassrod = viper.GetString("storage.redis_password")
+	conf.Storage.RedisCluster = viper.GetBool("storage.redis_cluster")
 	{% endif %}
 	{% endif %}
 
