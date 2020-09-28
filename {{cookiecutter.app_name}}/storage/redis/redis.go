@@ -26,9 +26,9 @@ func (c *Cache) Init() error {
 	log.Debug("redis host is - ", redisHost)
 	c.ctx = context.Background()
 	c.rdb = redis.NewClient(&redis.Options{
-		Addr: redisHost,
+		Addr:     redisHost,
 		Password: config.Conf.Storage.RedisPassrod,
-		DB:   config.Conf.Storage.RedisDB,
+		DB:       config.Conf.Storage.RedisDB,
 	})
 	_, err := c.rdb.Ping(c.ctx).Result()
 	return err
@@ -52,7 +52,5 @@ func (c *Cache) Get(key string) (interface{}, error) {
 // Set ...
 func (c *Cache) Set(key string, value interface{}, durations time.Duration) error {
 	err := c.rdb.Set(c.ctx, key, "value", durations).Err()
-	if err != nil {
-		panic(err)
-	}
+	return err
 }

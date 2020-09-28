@@ -25,7 +25,7 @@ type Storage interface {
 // Cache interface
 type Cache interface {
 	Init() error
-	Get(string) interface{}, error
+	Get(string) (interface{}, error)
 	Set(string, interface{}, time.Duration) error
 	Close() error
 }

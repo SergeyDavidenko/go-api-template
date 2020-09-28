@@ -77,9 +77,9 @@ type SectionStorage struct {
 	Port     uint16 `yaml:"port"`
 	Database string `yaml:"database"`
 	{% if cookiecutter.use_redis == "y" %}
-	RedisHost string `yaml:"redis_host"`
-	RedisPort int    `yaml:"redis_port"`
-	RedisDB   int     `yaml:"redis_db"`
+	RedisHost    string `yaml:"redis_host"`
+	RedisPort    int    `yaml:"redis_port"`
+	RedisDB      int    `yaml:"redis_db"`
 	RedisPassrod string `yam:"redis_password"`
 	{% endif %}
 }
