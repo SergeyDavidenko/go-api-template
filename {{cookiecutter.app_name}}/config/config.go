@@ -31,6 +31,12 @@ storage:
   database: "{{cookiecutter.app_name}}"
   port: 5432
 {% endif %}
+{% if cookiecutter.use_redis == "y" %}
+  redis_host: "localhost"
+  redis_db: 0
+  redis_port: 6379
+  redis_password: ""
+{% endif %}
 `)
 
 // ConfYaml is config structure.
@@ -70,6 +76,12 @@ type SectionStorage struct {
 	Password string `yaml:"password"`
 	Port     uint16 `yaml:"port"`
 	Database string `yaml:"database"`
+	{% if cookiecutter.use_redis == "y" %}
+	RedisHost string `yaml:"redis_host"`
+	RedisPort int    `yaml:"redis_port"`
+	RedisDB   int     `yaml:"redis_db"`
+	RedisPassrod string `yam:"redis_password"`
+	{% endif %}
 }
 {% endif %}
 
@@ -127,6 +139,12 @@ func LoadConf(confPath string) (ConfYaml, error) {
 	conf.Storage.Password =  viper.GetString("storage.password")
 	conf.Storage.Database =  viper.GetString("storage.database")
 	conf.Storage.Port =  uint16(viper.GetUint("storage.port"))
+	{% if cookiecutter.use_redis == "y" %}
+	conf.Storage.RedisHost = viper.GetString("storage.redis_host")
+	conf.Storage.RedisPort = viper.GetInt("storage.redis_port")
+	conf.Storage.RedisDB = viper.GetInt("storage.redis_db")
+	conf.Storage.RedisPassrod = viper.GetString("storage.redis_password")
+	{% endif %}
 	{% endif %}
 
 	return conf, nil

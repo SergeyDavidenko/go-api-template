@@ -6,5 +6,6 @@
     "docker_hub_username": "sergeydavidenko",
     "docker_build_image_version": ["1.15", "1.14"],
     "use_git": "y",
-    "use_postgresql": "y"
+    "use_postgresql": "y",
+    "use_redis": "y"
 }

@@ -10,6 +10,9 @@ import (
 	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/storage"
 	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/storage/postgresql"
 	{% endif %}
+	{% if cookiecutter.use_redis == "y" %}
+	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/storage/redis"
+	{% endif %}
 	log "github.com/sirupsen/logrus"
 )
 
@@ -36,6 +39,13 @@ func ServerInit(configPath string) {
 	errInitDB := storage.StorageDB.Init()
 	if errInitDB != nil {
 		log.Fatal(errInitDB)
+	}
+	{% endif %}
+	{% if cookiecutter.use_redis == "y" %}
+	storage.CacheRedis = redis.New()
+	errInitCache := storage.CacheRedis.Init()
+	if errInitCache != nil {
+		log.Fatal(errInitCache)
 	}
 	{% endif %}
 }
