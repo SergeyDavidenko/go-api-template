@@ -78,7 +78,6 @@ type SectionStorage struct {
 	Database string `yaml:"database"`
 	{% if cookiecutter.use_redis == "y" %}
 	RedisHost    string `yaml:"redis_host"`
-	RedisPort    int    `yaml:"redis_port"`
 	RedisDB      int    `yaml:"redis_db"`
 	RedisPassrod string `yaml:"redis_password"`
 	RedisCluster bool   `yaml:"redis_cluster"`
@@ -142,7 +141,6 @@ func LoadConf(confPath string) (ConfYaml, error) {
 	conf.Storage.Port =  uint16(viper.GetUint("storage.port"))
 	{% if cookiecutter.use_redis == "y" %}
 	conf.Storage.RedisHost = viper.GetString("storage.redis_host")
-	conf.Storage.RedisPort = viper.GetInt("storage.redis_port")
 	conf.Storage.RedisDB = viper.GetInt("storage.redis_db")
 	conf.Storage.RedisPassrod = viper.GetString("storage.redis_password")
 	conf.Storage.RedisCluster = viper.GetBool("storage.redis_cluster")

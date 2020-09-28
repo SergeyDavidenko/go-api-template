@@ -2,7 +2,7 @@ package redis
 
 import (
 	"context"
-	"fmt"
+	"strings"
 	"time"
 
 	"github.com/go-redis/redis/v8"
@@ -12,9 +12,9 @@ import (
 
 // Cache is interface structure
 type Cache struct {
-	rdb *redis.Client
+	rdb  *redis.Client
 	rdbC *redis.ClusterClient
-	ctx context.Context
+	ctx  context.Context
 }
 
 // New func implements the cache interface
@@ -24,18 +24,19 @@ func New() *Cache {
 
 // Init client Cache.
 func (c *Cache) Init() error {
-	redisHost := fmt.Sprintf("%s:%d", config.Conf.Storage.RedisHost, config.Conf.Storage.RedisPort)
-	log.Debug("redis host is - ", redisHost)
+	log.Debug("redis host is - ", config.Conf.Storage.RedisHost)
 	c.ctx = context.Background()
 	if config.Conf.Storage.RedisCluster {
 		c.rdbC = redis.NewClusterClient(&redis.ClusterOptions{
-			Addrs: []string{redisHost},
+			Addrs: strings.Split(config.Conf.Storage.RedisHost, ","),
 		})
 		_, err := c.rdbC.Ping(c.ctx).Result()
+		log.Info("Start on cluster redis mode")
 		return err
 	}
+	log.Info("Start single redis mode")
 	c.rdb = redis.NewClient(&redis.Options{
-		Addr:     redisHost,
+		Addr:     config.Conf.Storage.RedisHost,
 		Password: config.Conf.Storage.RedisPassrod,
 		DB:       config.Conf.Storage.RedisDB,
 	})
