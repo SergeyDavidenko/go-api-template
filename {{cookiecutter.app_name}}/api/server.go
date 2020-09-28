@@ -74,5 +74,13 @@ func WebServerFiberRun() {
 		log.Info("Close database success")
 	}
 	{% endif %}
+	{% if cookiecutter.use_redis == "y" %}
+	errCloseRedis := storage.CacheRedis.Close()
+	if errCloseRedis != nil {
+		log.Error(errCloseRedis)
+	} else {
+		log.Info("Close redis success")
+	}
+	{% endif %}
 	log.Info("Server exiting")
 }
