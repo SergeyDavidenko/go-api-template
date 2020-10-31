@@ -11,7 +11,7 @@ sudo apt install cookiecutter
 
 Finally, to run it based on this template, type:
 ```console
-$ cookiecutter https://github.com/SergeyDavidenko/base-api-template.git
+$ cookiecutter https://github.com/SergeyDavidenko/go-api-template.git
 ```
 
 
