@@ -1,11 +1,11 @@
-package utils
+package app
 
 import (
 	"os/signal"
 	"syscall"
 
 	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/api"
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/config"
+	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/config"
 	{% if cookiecutter.use_postgresql == "y" %}
 	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/storage"
 	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/storage/postgresql"

@@ -1,8 +1,8 @@
 package router
 
 import (
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/config"
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/api/handler"
+	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/config"
+	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/api/handler"
 	"github.com/gofiber/adaptor/v2"
 	"github.com/gofiber/fiber/v2"
 	"github.com/prometheus/client_golang/prometheus/promhttp"

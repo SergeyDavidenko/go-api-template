@@ -1,4 +1,4 @@
-package model
+package models
 
 // Info struct model
 type Info struct {

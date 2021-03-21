@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/config"
+	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/config"
 	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/api/router"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -15,7 +15,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/pprof"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	{% if cookiecutter.use_postgresql == "y" %}
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/storage"
+	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/storage"
 	{% endif %}
 	log "github.com/sirupsen/logrus"
 )

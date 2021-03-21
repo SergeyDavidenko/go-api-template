@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/go-redis/redis/v8"
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/config"
+	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/config"
 	log "github.com/sirupsen/logrus"
 )
 

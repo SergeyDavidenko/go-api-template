@@ -2,8 +2,8 @@ package handler
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/config"
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/model"
+	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/config"
+	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/models"
 )
 
 // Info about app

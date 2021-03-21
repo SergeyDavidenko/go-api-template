@@ -3,7 +3,7 @@ package postgresql
 import (
 	"time"
 
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/config"
+	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/config"
 	"github.com/jackc/pgx"
 	"github.com/jackc/pgx/stdlib"
 	"github.com/jmoiron/sqlx"
