@@ -41,7 +41,7 @@ def remove_storage_files():
     Removes files needed for storage
     """
     shutil.rmtree(os.path.join(
-        PROJECT_DIRECTORY, "storage"
+        PROJECT_DIRECTORY, "internal/storage"
     ))
 
 
