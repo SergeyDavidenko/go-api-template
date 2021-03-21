@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/config"
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/api/router"
+	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/api/router"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"

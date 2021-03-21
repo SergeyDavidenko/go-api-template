@@ -4,14 +4,14 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/api"
+	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/api"
 	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/config"
 	{% if cookiecutter.use_postgresql == "y" %}
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/storage"
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/storage/postgresql"
+	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/storage"
+	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/storage/postgresql"
 	{% endif %}
 	{% if cookiecutter.use_redis == "y" %}
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/storage/redis"
+	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/storage/redis"
 	{% endif %}
 	log "github.com/sirupsen/logrus"
 )
