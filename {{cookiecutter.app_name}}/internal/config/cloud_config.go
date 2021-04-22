@@ -31,7 +31,7 @@ func fetchConfiguration(url string) ([]byte, error) {
 	if err != nil {
 		log.Fatalf("%s %s", ErrMsg, err.Error())
 	}
-	req.SetBasicAuth(viper.GetString("GO_CLOUD_USERNAME"), viper.GetString("GO_CLOUD_PASSWORD"))
+	req.SetBasicAuth(viper.GetString("CLOUD_USERNAME"), viper.GetString("CLOUD_PASSWORD"))
 	resp, errDo := client.Do(req)
 	if errDo != nil {
 		log.Fatalf("%s %s", ErrMsg, err.Error())

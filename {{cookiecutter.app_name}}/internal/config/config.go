@@ -92,8 +92,8 @@ func LoadConf(confPath string) (ConfYaml, error) {
 	viper.AutomaticEnv() // read in environment variables that match
 	viper.SetEnvPrefix("go")
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
-	if viper.GetBool("GO_CLOUD_CONFIG") {
-		loadConfiguration(viper.GetString("GO_CLOUD_URL"), "example", "default")
+	if viper.GetBool("CLOUD_CONFIG") {
+		loadConfiguration(viper.GetString("CLOUD_URL"), "example", "default")
 	}
 	if confPath != "" {
 		content, err := ioutil.ReadFile(confPath)
