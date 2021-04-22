@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"strings"
 
 	"github.com/spf13/viper"
@@ -93,6 +94,7 @@ func LoadConf(confPath string) (ConfYaml, error) {
 	viper.SetEnvPrefix("go")
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	if viper.GetBool("CLOUD_CONFIG") {
+		log.Println("Use config service")
 		loadConfiguration(viper.GetString("CLOUD_URL"), "example", "default")
 	}
 	if confPath != "" {

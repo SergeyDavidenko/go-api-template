@@ -47,12 +47,16 @@ func parseConfiguration(body []byte) {
 	if err != nil {
 		log.Fatalf("Cannot parse configuration, message: %s", err.Error())
 	}
-	for key, value := range cloudConfig.PropertySources[0].Source {
-		viper.Set(key, value)
-		log.Printf("Loading config property %v => %v\n", key, value)
-	}
-	if viper.IsSet("server_name") {
-		log.Printf("Successfully loaded configuration for service %s\n", viper.GetString("server_name"))
+	if len(cloudConfig.PropertySources) > 0 {
+		for key, value := range cloudConfig.PropertySources[0].Source {
+			viper.Set(key, value)
+			log.Printf("Loading config property %v => %v\n", key, value)
+		}
+		if viper.IsSet("server_name") {
+			log.Printf("Successfully loaded configuration for service %s\n", viper.GetString("server_name"))
+		}
+	} else {
+		log.Fatalf("Cannot get config from cloud config service. Check if exist config.")
 	}
 }
 
