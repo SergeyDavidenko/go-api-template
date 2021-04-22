@@ -10,10 +10,10 @@ require (
 	github.com/spf13/viper v1.7.1
 	{% if cookiecutter.use_postgresql == "y" -%}
 	github.com/jackc/pgx v3.6.2+incompatible
-	github.com/jmoiron/sqlx v1.3.1
+	github.com/jmoiron/sqlx v1.3.3
 	github.com/pkg/errors v0.9.1
 	{%- endif %}
 	{% if cookiecutter.use_redis == "y" %}
-	github.com/go-redis/redis/v8 v8.7.1
+	github.com/go-redis/redis/v8 v8.8.2
 	{%- endif %}
 )
