@@ -6,6 +6,7 @@ import (
 
 	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/api"
 	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/config"
+	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/models"
 	{% if cookiecutter.use_postgresql == "y" %}
 	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/storage"
 	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/storage/postgresql"
@@ -13,6 +14,7 @@ import (
 	{% if cookiecutter.use_redis == "y" %}
 	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/storage/redis"
 	{% endif %}
+	"github.com/prometheus/client_golang/prometheus"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -34,6 +36,9 @@ func ServerInit(configPath string) {
 	log.SetFormatter(&log.TextFormatter{
 		FullTimestamp: true,
 	})
+	// Support metrics
+	metrics := models.NewMetrics()
+	prometheus.MustRegister(metrics)
 	{% if cookiecutter.use_postgresql == "y" %}
 	storage.StorageDB = postgresql.New()
 	errInitDB := storage.StorageDB.Init()

@@ -8,6 +8,7 @@ import (
 
 // Info about app
 func Info(c *fiber.Ctx) error {
+	defer models.InfoCountInc()
 	info := models.Info{
 		AppName: config.Conf.Core.Lable,
 		Env: config.Conf.Core.Environment,
