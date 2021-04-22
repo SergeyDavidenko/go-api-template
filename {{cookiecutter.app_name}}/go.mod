@@ -4,8 +4,8 @@ go {{cookiecutter.docker_build_image_version}}
 
 require (
 	github.com/gofiber/adaptor/v2 v2.1.1
-	github.com/gofiber/fiber/v2 v2.6.0
-	github.com/prometheus/client_golang v1.7.1
+	github.com/gofiber/fiber/v2 v2.8.0
+	github.com/prometheus/client_golang v1.10.0
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/viper v1.7.1
 	{% if cookiecutter.use_postgresql == "y" -%}
