@@ -138,7 +138,7 @@ func LoadConf(confPath string) (ConfYaml, error) {
 
 	{% if cookiecutter.use_postgresql == "y" %}
 	//Storage
-	conf.Storage.Host =  viper.GetString("storage.string")
+	conf.Storage.Host =  viper.GetString("storage.host")
 	conf.Storage.Username =  viper.GetString("storage.username")
 	conf.Storage.Password =  viper.GetString("storage.password")
 	conf.Storage.Database =  viper.GetString("storage.database")
