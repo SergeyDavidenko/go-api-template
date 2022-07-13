@@ -4,8 +4,6 @@
     "app_name": "mygolangproject",
     "project_short_description": "A Golang project.",
     "docker_hub_username": "sergeydavidenko",
-    "docker_build_image_version": ["1.15", "1.14", "1.16"],
-    "use_git": "y",
-    "use_postgresql": "y",
-    "use_redis": "y"
+    "docker_build_image_version": ["1.16", "1.17", "1.18"],
+    "use_git": "y"
 }

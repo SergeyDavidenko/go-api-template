@@ -1,56 +1,85 @@
 package app
 
 import (
+	"context"
+	"net/http"
+	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/api"
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/config"
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/models"
-	{% if cookiecutter.use_postgresql == "y" %}
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/storage"
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/storage/postgresql"
-	{% endif %}
-	{% if cookiecutter.use_redis == "y" %}
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/storage/redis"
-	{% endif %}
-	"github.com/prometheus/client_golang/prometheus"
-	log "github.com/sirupsen/logrus"
+	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/repository"
+	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/rest"
+	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/pkg/config"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/recover"
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 )
 
-// ServerInit init vars, config and log level
-func ServerInit(configPath string) {
-	var err error
-	signal.Notify(api.Quit, syscall.SIGINT, syscall.SIGTERM)
-	config.Conf, err = config.LoadConf(configPath)
-	if err != nil {
-		log.Error(err)
+type Server struct {
+	cfg     *config.Config
+	quit    chan os.Signal
+	repo    *repository.DB
+	api     *fiber.App
+	heltz   *fiber.App
+	handler *rest.Handler
+}
+
+func New(conf *config.Config, repo *repository.DB) *Server {
+	initLogger()
+	cfgApi := conf.GetHTTP("api")
+	srv := &Server{
+		api: fiber.New(fiber.Config{
+			ReadTimeout:  cfgApi.ReadTimeout,
+			WriteTimeout: cfgApi.WriteTimeout,
+			IdleTimeout:  15 * time.Second,
+		}),
+		cfg:     conf,
+		quit:    make(chan os.Signal, 1),
+		repo:    repo,
+		handler: rest.New(repo),
 	}
-	level, err := log.ParseLevel(config.Conf.Log.Level)
+	signal.Notify(srv.quit, syscall.SIGINT, syscall.SIGTERM)
+	return srv
+}
+
+func (s *Server) Run() {
+	err := s.repo.Migrations(".")
 	if err != nil {
-		log.Error("Cannot parse log level")
-		log.SetLevel(log.InfoLevel)
+		logrus.Fatal(err)
 	}
-	log.Debug("Set log level ", level)
-	log.SetLevel(level)
-	log.SetFormatter(&log.TextFormatter{
+	s.api.Use(cors.New())
+	s.api.Use(recover.New())
+	s.setupRouter()
+	if viper.GetBool("USE_HEALTH") {
+		go func() {
+			if errAppHealtz := s.heltz.Listen(s.cfg.GetHTTP("healtz").HostString); errAppHealtz != nil && errAppHealtz != http.ErrServerClosed {
+				logrus.Fatal("listen: ", errAppHealtz)
+			}
+		}()
+	}
+	go func() {
+		if err := s.api.Listen(s.cfg.GetHTTP("api").HostString); err != nil && err != http.ErrServerClosed {
+			logrus.Fatal("listen: ", err)
+		}
+	}()
+	<-s.quit
+	logrus.Info("server shutdown ...")
+	_, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	s.shutdown()
+	logrus.Info("server exiting")
+}
+
+func (s *Server) shutdown() {
+	s.api.Shutdown()
+}
+
+func initLogger() {
+	logrus.SetLevel(logrus.InfoLevel)
+	logrus.SetFormatter(&logrus.TextFormatter{
 		FullTimestamp: true,
 	})
-	// Support metrics
-	metrics := models.NewMetrics()
-	prometheus.MustRegister(metrics)
-	{% if cookiecutter.use_postgresql == "y" %}
-	storage.StorageDB = postgresql.New()
-	errInitDB := storage.StorageDB.Init()
-	if errInitDB != nil {
-		log.Fatal(errInitDB)
-	}
-	{% endif %}
-	{% if cookiecutter.use_redis == "y" %}
-	storage.CacheRedis = redis.New()
-	errInitCache := storage.CacheRedis.Init()
-	if errInitCache != nil {
-		log.Fatal(errInitCache)
-	}
-	{% endif %}
 }

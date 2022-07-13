@@ -1,0 +1,26 @@
+http:
+  api:
+    hostString: ":8080"
+    readTimeout: 15s
+    writeTimeout: 15s
+    maxHeaderMegabytes: 4
+  healtz:
+    hostString: ":1499"
+    readTimeout: 15s
+    writeTimeout: 15s
+    maxHeaderMegabytes: 4
+redis:
+  hostString: "localhost:6379"
+  login: ""
+  password: ""
+  connectionsCount: 5
+  dbNum: 1
+postgres:
+  hostString: "localhost"
+  port: 5432
+  login: "go"
+  password: "go"
+  dbName: "{{cookiecutter.app_name}}"
+  connectionsCount: 20
+custom:
+  version: "0.0.1"
