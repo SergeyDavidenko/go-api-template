@@ -9,8 +9,8 @@ import (
 )
 
 type DB struct {
-	cfg       *config.Config
-	pg        *gorm.DB
+	cfg *config.Config
+	pg  *gorm.DB
 }
 
 func New(cfg *config.Config) (*DB, error) {
@@ -24,8 +24,8 @@ func New(cfg *config.Config) (*DB, error) {
 		return &DB{}, err
 	}
 	return &DB{
-		cfg:       cfg,
-		pg:        db,
+		cfg: cfg,
+		pg:  db,
 	}, nil
 }
 
