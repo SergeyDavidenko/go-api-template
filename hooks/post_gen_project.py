@@ -47,8 +47,7 @@ if '{{ cookiecutter.docker_build_image_version }}' == '1.16':
     tidy = Popen(['go', 'mod', 'tidy -go=1.16'], cwd=PROJECT_DIRECTORY)
     tidy.wait()
 elif '{{ cookiecutter.docker_build_image_version }}' == '1.17':
-    tidy = Popen(['go', 'mod', 'tidy -go=1.16', '&&', 
-    'go', 'mod', 'tidy -go=1.17'], cwd=PROJECT_DIRECTORY)
+    tidy = Popen(['go', 'mod', 'tidy',  '-go=1.17'], cwd=PROJECT_DIRECTORY)
     tidy.wait()
 elif '{{ cookiecutter.docker_build_image_version }}' == '1.18':
     tidy = Popen(['go', 'mod', 'tidy -go=1.18'], cwd=PROJECT_DIRECTORY)
