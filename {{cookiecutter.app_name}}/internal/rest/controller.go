@@ -1,7 +1,7 @@
 package rest
 
 import (
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/repository"
+	"{{cookiecutter.app_name}}/internal/repository"
 	"github.com/sirupsen/logrus"
 )
 

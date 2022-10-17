@@ -1,19 +1,9 @@
-FROM golang:{{cookiecutter.docker_build_image_version}} as modules
-
-ADD go.mod go.sum /m/
-# Get all dependencies
-RUN cd /m && go mod download
-#------------------------------------------------------
 FROM golang:{{cookiecutter.docker_build_image_version}} as builder
-# Add golang linter
-RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.31.0 && golangci-lint --version
-COPY --from=modules /go/pkg /go/pkg
+
 # Set the Current Working Directory inside the container
 WORKDIR /go/src/github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}
 # Copy the source from the current directory to the Working Directory inside the container
 COPY . .
-# Check linter
-RUN golangci-lint run --timeout 10m0s ./...
 # Run test
 RUN go test ./...
 # Build the Go app

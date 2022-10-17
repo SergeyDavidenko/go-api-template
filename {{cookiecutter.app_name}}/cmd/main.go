@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/app"
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/repository"
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/pkg/config"
+	"{{cookiecutter.app_name}}/internal/app"
+	"{cookiecutter.app_name}}/internal/repository"
+	"{{cookiecutter.app_name}}/pkg/config"
 	log "github.com/sirupsen/logrus"
 )
 

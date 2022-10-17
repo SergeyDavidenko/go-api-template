@@ -5,7 +5,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/repository"
+	"{{cookiecutter.app_name}}/internal/repository"
 	"github.com/gofiber/fiber/v2"
 	"github.com/stretchr/testify/assert"
 )

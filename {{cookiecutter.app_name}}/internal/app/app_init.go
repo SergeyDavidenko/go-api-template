@@ -8,9 +8,9 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/repository"
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/internal/rest"
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/pkg/config"
+	"{{cookiecutter.app_name}}/internal/repository"
+	"{{cookiecutter.app_name}}/internal/rest"
+	"{{cookiecutter.app_name}}/pkg/config"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/recover"

@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/pkg/config"
+	"{{cookiecutter.app_name}}/pkg/config"
 	"github.com/sirupsen/logrus"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

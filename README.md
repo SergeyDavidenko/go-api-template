@@ -24,8 +24,8 @@ project_short_description [A Golang project.]: Awesome Echo Server
 docker_hub_username [sergeydavidenko]: sergeydavidenko
 use_git [y]: y
 Select docker_build_image_version:
-1 - 1.16
-2 - 1.17
-3 - 1.18
+1 - 1.17
+2 - 1.18
+3 - 1.19
 Choose from 1, 2, 3 [1]: 1
 ```
