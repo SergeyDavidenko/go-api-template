@@ -10,7 +10,7 @@ import (
 func TestConfig(t *testing.T) {
 	err := os.Setenv("GO_AUTH_USERNAME", "test")
 	assert.Nil(t, err)
-	serviceName := "stripo-security-service"
+	serviceName := "{{cookiecutter.app_name}}"
 	cfg, err := New("../../configs/", serviceName)
 	assert.Nil(t, err)
 	assert.Equal(t, ":8080", cfg.HTTP["api"].HostString)
