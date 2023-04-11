@@ -7,6 +7,9 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	{% if cookiecutter.db_type == "mongodb" %}
+	"go.mongodb.org/mongo-driver/mongo/options"
+	{% endif %}
 )
 
 type (
@@ -88,7 +91,7 @@ func (c *Config) GetHTTP(key string) *HTTPConfig {
 func (c *Config) GetRedis() *RedisConfig {
 	return &c.Redis
 }
-
+{% if cookiecutter.db_type == "mongodb" %}
 func (c *Config) BuildDSNMongoDB() *options.ClientOptions {
 	mg := c.GetMongoDB()
 	credential := options.Credential{
@@ -104,6 +107,7 @@ func (c *Config) BuildDSNMongoDB() *options.ClientOptions {
 	logrus.Info(dsn)
 	return clientOpts
 }
+{% endif %}
 
 func (c *Config) BuildDSNPostgres() string {
 	pg := c.GetPostgres()
@@ -154,6 +158,9 @@ func unmarshal(cfg *Config) error {
 		return err
 	}
 	if err := viper.UnmarshalKey("auth", &cfg.Auth); err != nil {
+		return err
+	}
+	if err := viper.UnmarshalKey("mongodb", &cfg.MongoDB); err != nil {
 		return err
 	}
 	cfg.Auth.Username = viper.GetString("auth.username")

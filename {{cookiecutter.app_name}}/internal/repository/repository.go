@@ -10,6 +10,7 @@ import (
 	{% endif %}
 	{% if cookiecutter.db_type == "mongodb" %}
 	"go.mongodb.org/mongo-driver/mongo"
+	"context"
 	{% endif %}
 )
 
