@@ -22,5 +22,11 @@ postgres:
   password: "go"
   dbName: "{{cookiecutter.app_name}}"
   connectionsCount: 20
+mongodb:
+  hostString: "localhost"
+  port: 27017
+  login: "go"
+  password: "go"
+  dbName: "{{cookiecutter.app_name}}"
 custom:
   version: "0.0.1"

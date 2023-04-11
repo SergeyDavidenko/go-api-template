@@ -3,7 +3,7 @@ package config
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"time"
 
@@ -53,7 +53,7 @@ func fetchConfiguration(url string) ([]byte, error) {
 	if resp.StatusCode != http.StatusOK {
 		log.Fatal("check cloud config url. Status code not eq 200. Status code is:", resp.StatusCode)
 	}
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	return body, err
 }
 

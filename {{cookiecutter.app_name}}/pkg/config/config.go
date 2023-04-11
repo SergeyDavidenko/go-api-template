@@ -14,6 +14,7 @@ type (
 		HTTP     map[string]HTTPConfig
 		Redis    RedisConfig
 		Postgres PostgresConfig
+		MongoDB  MongoDBConfig
 		Custom   map[string]string
 		Auth     Auth
 	}
@@ -38,6 +39,14 @@ type (
 		DBNum         int    `mapstructure:"dbNum"`
 	}
 
+	MongoDBConfig struct {
+		HostString string `mapstructure:"hostString"`
+		Port       int    `mapstructure:"port"`
+		Login      string `mapstructure:"login"`
+		Password   string `mapstructure:"password"`
+		DBName     string `mapstructure:"dbName"`
+	}
+
 	PostgresConfig struct {
 		HostString    string `mapstructure:"hostString"`
 		Port          int    `mapstructure:"port"`
@@ -50,6 +59,10 @@ type (
 
 func MakeServerList(hostString string) []string {
 	return strings.Split(hostString, ",")
+}
+
+func (c *Config) GetMongoDB() *MongoDBConfig {
+	return &c.MongoDB
 }
 
 func (c *Config) GetPostgres() *PostgresConfig {
@@ -74,6 +87,22 @@ func (c *Config) GetHTTP(key string) *HTTPConfig {
 
 func (c *Config) GetRedis() *RedisConfig {
 	return &c.Redis
+}
+
+func (c *Config) BuildDSNMongoDB() *options.ClientOptions {
+	mg := c.GetMongoDB()
+	credential := options.Credential{
+		AuthSource:    mg.DBName,
+		Username:      mg.Login,
+		Password:      mg.Password,
+	}
+	if mg.HostString == "" {
+		logrus.Fatal("mongodb hostname not set")
+	}
+	dsn := fmt.Sprintf("mongodb://%s:%d", mg.HostString, mg.Port)
+	clientOpts := options.Client().ApplyURI(dsn).SetAuth(credential)
+	logrus.Info(dsn)
+	return clientOpts
 }
 
 func (c *Config) BuildDSNPostgres() string {

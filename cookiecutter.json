@@ -5,5 +5,6 @@
     "project_short_description": "A Golang project.",
     "docker_hub_username": "sergeydavidenko",
     "docker_build_image_version": ["1.18", "1.19", "1.20"],
+    "db_type": ["postgres", "mongodb"],
     "use_git": "y"
 }
