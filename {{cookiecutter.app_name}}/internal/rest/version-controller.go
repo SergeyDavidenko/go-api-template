@@ -5,6 +5,6 @@ import (
 )
 
 func (h *Handler) Version(c *fiber.Ctx) error {
-	version := "0.0.1"
+	version := h.conf.GetCustom("version")
 	return c.JSON(fiber.Map{"version": version})
 }
