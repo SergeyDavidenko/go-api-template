@@ -36,6 +36,7 @@ func New(conf *config.Config, repo *repository.DB) *Server {
 			WriteTimeout: cfgApi.WriteTimeout,
 			IdleTimeout:  15 * time.Second,
 		}),
+		heltz:   fiber.New(),
 		cfg:     conf,
 		quit:    make(chan os.Signal, 1),
 		repo:    repo,
@@ -46,35 +47,45 @@ func New(conf *config.Config, repo *repository.DB) *Server {
 }
 
 func (s *Server) Run() {
-	err := s.repo.Migrations(".")
-	if err != nil {
-		logrus.Fatal(err)
+	if err := s.repo.Migrations("."); err != nil {
+		logrus.Fatalf("failed to apply migrations: %v", err)
 	}
 	s.api.Use(cors.New())
 	s.api.Use(recover.New())
 	s.setupRouter()
 	if viper.GetBool("USE_HEALTH") {
 		go func() {
-			if errAppHealtz := s.heltz.Listen(s.cfg.GetHTTP("healtz").HostString); errAppHealtz != nil && errAppHealtz != http.ErrServerClosed {
-				logrus.Fatal("listen: ", errAppHealtz)
+			if err := s.heltz.Listen(s.cfg.GetHTTP("healtz").HostString); err != nil && err != http.ErrServerClosed {
+				logrus.Fatalf("Health server listen error: %v", err)
 			}
 		}()
 	}
 	go func() {
 		if err := s.api.Listen(s.cfg.GetHTTP("api").HostString); err != nil && err != http.ErrServerClosed {
-			logrus.Fatal("listen: ", err)
+			logrus.Fatalf("API server listen error: %v", err)
 		}
 	}()
 	<-s.quit
-	logrus.Info("server shutdown ...")
-	_, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
+	logrus.Info("shutting down the server...")
 	s.shutdown()
-	logrus.Info("server exiting")
+	logrus.Info("server exited")
 }
 
 func (s *Server) shutdown() {
-	s.api.Shutdown()
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	if s.api != nil {
+		if err := s.api.ShutdownWithContext(ctx); err != nil {
+			logrus.Errorf("API server shutdown error: %v", err)
+		}
+	}
+
+	if s.heltz != nil {
+		if err := s.heltz.ShutdownWithContext(ctx); err != nil {
+			logrus.Errorf("Health server shutdown error: %v", err)
+		}
+	}
 }
 
 func initLogger() {
