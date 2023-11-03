@@ -2,6 +2,7 @@ package rest
 
 import (
 	"{{cookiecutter.app_name}}/internal/repository"
+	"{{cookiecutter.app_name}}/pkg/config"
 	
 	log "github.com/sirupsen/logrus"
 )
