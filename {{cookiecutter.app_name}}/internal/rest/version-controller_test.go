@@ -12,7 +12,7 @@ import (
 )
 
 func TestHandler_Version(t *testing.T) {
-	handler := New(&repository.DB{})
+	handler := New(&repository.DB{}, &config.Config{Custom: map[string]string{"version": "0.0.1"}})
 	tt := fiber.New()
 	tt.Get("/version", handler.Version)
 
