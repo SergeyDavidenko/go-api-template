@@ -19,15 +19,15 @@ import (
 )
 
 type Server struct {
-	cfg     *config.Config
-	quit    chan os.Signal
-	repo    *repository.DB
-	api     *fiber.App
-	heltz   *fiber.App
-	handler *rest.Handler
+	cfg          *config.Config
+	quit         chan os.Signal
+	database     *repository.DB
+	api          *fiber.App
+	healthServer *fiber.App
+	handler      *rest.Handler
 }
 
-func New(conf *config.Config, repo *repository.DB) *Server {
+func New(conf *config.Config, database *repository.DB) *Server {
 	initLogger()
 	cfgApi := conf.GetHTTP("api")
 	srv := &Server{
@@ -36,18 +36,18 @@ func New(conf *config.Config, repo *repository.DB) *Server {
 			WriteTimeout: cfgApi.WriteTimeout,
 			IdleTimeout:  15 * time.Second,
 		}),
-		heltz:   fiber.New(),
-		cfg:     conf,
-		quit:    make(chan os.Signal, 1),
-		repo:    repo,
-		handler: rest.New(repo),
+		healthServer: fiber.New(),
+		cfg:          conf,
+		quit:         make(chan os.Signal, 1),
+		database:     database,
+		handler:      rest.New(database),
 	}
 	signal.Notify(srv.quit, syscall.SIGINT, syscall.SIGTERM)
 	return srv
 }
 
 func (s *Server) Run() {
-	if err := s.repo.Migrations("."); err != nil {
+	if err := s.database.Migrations("."); err != nil {
 		logrus.Fatalf("failed to apply migrations: %v", err)
 	}
 	s.api.Use(cors.New())
@@ -55,7 +55,7 @@ func (s *Server) Run() {
 	s.setupRouter()
 	if viper.GetBool("USE_HEALTH") {
 		go func() {
-			if err := s.heltz.Listen(s.cfg.GetHTTP("healtz").HostString); err != nil && err != http.ErrServerClosed {
+			if err := s.healthServer.Listen(s.cfg.GetHTTP("healtz").HostString); err != nil && err != http.ErrServerClosed {
 				logrus.Fatalf("Health server listen error: %v", err)
 			}
 		}()
@@ -81,8 +81,8 @@ func (s *Server) shutdown() {
 		}
 	}
 
-	if s.heltz != nil {
-		if err := s.heltz.ShutdownWithContext(ctx); err != nil {
+	if s.healthServer != nil {
+		if err := s.healthServer.ShutdownWithContext(ctx); err != nil {
 			logrus.Errorf("Health server shutdown error: %v", err)
 		}
 	}
