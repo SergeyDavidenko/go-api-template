@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"{{cookiecutter.app_name}}/internal/repository"
+	"{{cookiecutter.app_name}}/pkg/config"
 )
 
 func TestHandler_Version(t *testing.T) {
