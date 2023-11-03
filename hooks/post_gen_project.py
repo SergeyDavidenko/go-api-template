@@ -43,12 +43,7 @@ else:
     remove_file(".gitignore")
 
 print('{{ cookiecutter.docker_build_image_version }}')
-if '{{ cookiecutter.docker_build_image_version }}' == '1.19':
-    tidy = Popen(['go', 'mod', 'tidy -go=1.19'], cwd=PROJECT_DIRECTORY)
-    tidy.wait()
-elif '{{ cookiecutter.docker_build_image_version }}' == '1.20':
-    tidy = Popen(['go', 'mod', 'tidy',  '-go=1.20'], cwd=PROJECT_DIRECTORY)
-    tidy.wait()
-elif '{{ cookiecutter.docker_build_image_version }}' == '1.21':
-    tidy = Popen(['go', 'mod', 'tidy -go=1.21'], cwd=PROJECT_DIRECTORY)
-    tidy.wait()
+tidy = Popen(['go', 'mod', 'init', '{{cookiecutter.app_name}}'], cwd=PROJECT_DIRECTORY)
+tidy.wait()
+tidy = Popen(['go', 'mod', 'tidy'], cwd=PROJECT_DIRECTORY)
+tidy.wait()
