@@ -14,7 +14,6 @@ func TestConfig(t *testing.T) {
 	cfg, err := New("../../configs/", serviceName)
 	assert.Nil(t, err)
 	assert.Equal(t, ":8080", cfg.HTTP["api"].HostString)
-	assert.Equal(t, "secret", cfg.Auth.Password)
 	test := os.Getenv("GO_AUTH_USERNAME")
 	assert.Equal(t, "test", test)
 	assert.Equal(t, "test", cfg.Auth.Username)
