@@ -40,7 +40,7 @@ func New(conf *config.Config, database *repository.DB) *Server {
 		cfg:          conf,
 		quit:         make(chan os.Signal, 1),
 		database:     database,
-		handler:      rest.New(database),
+		handler:      rest.New(database, conf),
 	}
 	signal.Notify(srv.quit, syscall.SIGINT, syscall.SIGTERM)
 	return srv
