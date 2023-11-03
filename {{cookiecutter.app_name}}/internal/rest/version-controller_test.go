@@ -5,9 +5,10 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"{{cookiecutter.app_name}}/internal/repository"
 	"github.com/gofiber/fiber/v2"
 	"github.com/stretchr/testify/assert"
+
+	"{{cookiecutter.app_name}}/internal/repository"
 )
 
 func TestHandler_Version(t *testing.T) {
