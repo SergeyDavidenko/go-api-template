@@ -5,7 +5,7 @@ import (
 	"{{cookiecutter.app_name}}/internal/repository"
 	"{{cookiecutter.app_name}}/pkg/config"
 
-	log "github.com/sirupsen/logrus"
+	"go.uber.org/fx"
 )
 
 const (
@@ -13,14 +13,16 @@ const (
 )
 
 func main() {
-	cfg, err := config.New("configs/", serviceName)
-	if err != nil {
-		log.Fatal(err)
-	}
-	repo, err := repository.New(cfg)
-	if err != nil {
-		log.Fatal(err)
-	}
-	srv := app.New(cfg, repo)
+	srv := fx.New(
+		fx.Provide(
+			func() (*config.Config, error) {
+				return config.New("configs/", serviceName)
+			},
+			repository.New,
+			app.New,
+		),
+		fx.Invoke(app.RunServer),
+		fx.NopLogger,
+	)
 	srv.Run()
 }

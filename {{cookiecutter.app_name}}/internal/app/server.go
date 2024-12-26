@@ -3,24 +3,21 @@ package app
 import (
 	"context"
 	"net/http"
-	"os"
-	"os/signal"
-	"syscall"
 	"time"
 
-	"{{cookiecutter.app_name}}/internal/repository"
-	"{{cookiecutter.app_name}}/internal/rest"
-	"{{cookiecutter.app_name}}/pkg/config"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	"go.uber.org/fx"
+	"{{cookiecutter.app_name}}/internal/repository"
+	"{{cookiecutter.app_name}}/internal/rest"
+	"{{cookiecutter.app_name}}/pkg/config"
 )
 
 type Server struct {
 	cfg          *config.Config
-	quit         chan os.Signal
 	database     *repository.DB
 	api          *fiber.App
 	healthServer *fiber.App
@@ -38,15 +35,13 @@ func New(conf *config.Config, database *repository.DB) *Server {
 		}),
 		healthServer: fiber.New(),
 		cfg:          conf,
-		quit:         make(chan os.Signal, 1),
 		database:     database,
 		handler:      rest.New(database, conf),
 	}
-	signal.Notify(srv.quit, syscall.SIGINT, syscall.SIGTERM)
 	return srv
 }
 
-func (s *Server) Run() {
+func (s *Server) run() {
 	if err := s.database.Migrations("."); err != nil {
 		logrus.Fatalf("failed to apply migrations: %v", err)
 	}
@@ -65,10 +60,6 @@ func (s *Server) Run() {
 			logrus.Fatalf("API server listen error: %v", err)
 		}
 	}()
-	<-s.quit
-	logrus.Info("shutting down the server...")
-	s.shutdown()
-	logrus.Info("server exited")
 }
 
 func (s *Server) shutdown() {
@@ -92,5 +83,18 @@ func initLogger() {
 	logrus.SetLevel(logrus.InfoLevel)
 	logrus.SetFormatter(&logrus.TextFormatter{
 		FullTimestamp: true,
+	})
+}
+
+func RunServer(lc fx.Lifecycle, srv *Server) {
+	lc.Append(fx.Hook{
+		OnStart: func(ctx context.Context) error {
+			srv.run()
+			return nil
+		},
+		OnStop: func(ctx context.Context) error {
+			srv.shutdown()
+			return nil
+		},
 	})
 }
