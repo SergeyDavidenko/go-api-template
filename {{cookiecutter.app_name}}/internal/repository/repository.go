@@ -51,6 +51,11 @@ func New(cfg *config.Config) (*DB, error) {
 		client: client,
 	}, nil
 	{% endif %}
+	{% if cookiecutter.db_type == "none" %}
+	return &DB{
+		cfg: cfg,
+	}, nil
+	{% endif %}
 }
 
 func (db *DB) Migrations(path string) error {

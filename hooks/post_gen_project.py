@@ -36,14 +36,20 @@ def init_git():
         git.wait()
 
 
+print('{{ cookiecutter.docker_build_image_version }}')
+tidy = Popen(
+    ['go', 'mod', 'init', '{{cookiecutter.app_name}}'], cwd=PROJECT_DIRECTORY)
+tidy.wait()
+tidy = Popen(['go', 'mod', 'tidy'], cwd=PROJECT_DIRECTORY)
+tidy.wait()
+
+# Fmt golang files
+fmt = Popen(['go', 'fmt', './...'], cwd=PROJECT_DIRECTORY)
+fmt.wait()
+
+
 # Initialize Git (should be run after all file have been modified or deleted)
 if '{{ cookiecutter.use_git }}'.lower() == 'y':
     init_git()
 else:
     remove_file(".gitignore")
-
-print('{{ cookiecutter.docker_build_image_version }}')
-tidy = Popen(['go', 'mod', 'init', '{{cookiecutter.app_name}}'], cwd=PROJECT_DIRECTORY)
-tidy.wait()
-tidy = Popen(['go', 'mod', 'tidy'], cwd=PROJECT_DIRECTORY)
-tidy.wait()

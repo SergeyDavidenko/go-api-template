@@ -4,7 +4,6 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/healthcheck"
 )
 
-
 func (s *Server) setupRouter() {
 	s.api.Get("/version", s.handler.Version)
 

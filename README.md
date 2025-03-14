@@ -22,10 +22,15 @@ github_username [SergeyDavidenko]: SergeyDavidenko
 app_name [mygolangproject]: echoserver
 project_short_description [A Golang project.]: Awesome Echo Server
 docker_hub_username [sergeydavidenko]: sergeydavidenko
-use_git [y]: y
 Select docker_build_image_version:
-1 - 1.21
-2 - 1.20
-3 - 1.19
+1 - 1.24
+2 - 1.22
+3 - 1.21
 Choose from 1, 2, 3 [1]: 1
+Select db_type
+    1 - postgres
+    2 - mongodb
+    3 - none
+Choose from [1/2/3] [1]: 1
+use_git [y]: y
 ```
