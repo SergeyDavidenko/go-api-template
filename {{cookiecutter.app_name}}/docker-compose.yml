@@ -1,0 +1,82 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+      - "1499:1499"
+    environment:
+      - GO_ENV=development
+      {% if cookiecutter.db_type == "postgres" %}
+      - GO_POSTGRES_HOSTSTRING=postgres
+      - GO_POSTGRES_PORT=5432
+      - GO_POSTGRES_LOGIN=go
+      - GO_POSTGRES_PASSWORD=go
+      - GO_POSTGRES_DBNAME={{cookiecutter.app_name}}
+      {% endif %}
+      {% if cookiecutter.db_type == "mongodb" %}
+      - GO_MONGODB_HOSTSTRING=mongodb:27017
+      - GO_MONGODB_LOGIN=go
+      - GO_MONGODB_PASSWORD=go
+      - GO_MONGODB_DBNAME={{cookiecutter.app_name}}
+      {% endif %}
+    depends_on:
+      {% if cookiecutter.db_type == "postgres" %}
+      - postgres
+      {% endif %}
+      {% if cookiecutter.db_type == "mongodb" %}
+      - mongodb
+      {% endif %}
+    volumes:
+      - ./configs:/root/configs
+      - ./migrations:/root/migrations
+    networks:
+      - app-network
+
+  {% if cookiecutter.db_type == "postgres" %}
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: go
+      POSTGRES_PASSWORD: go
+      POSTGRES_DB: {{cookiecutter.app_name}}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+  {% endif %}
+
+  {% if cookiecutter.db_type == "mongodb" %}
+  mongodb:
+    image: mongo:7
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: go
+      MONGO_INITDB_ROOT_PASSWORD: go
+      MONGO_INITDB_DATABASE: {{cookiecutter.app_name}}
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - app-network
+  {% endif %}
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+
+volumes:
+  {% if cookiecutter.db_type == "postgres" %}
+  postgres_data:
+  {% endif %}
+  {% if cookiecutter.db_type == "mongodb" %}
+  mongodb_data:
+  {% endif %}
+
+networks:
+  app-network:
+    driver: bridge

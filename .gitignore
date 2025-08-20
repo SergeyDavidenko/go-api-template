@@ -2,3 +2,13 @@
 __pycache__
 venv
 venv/*
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db

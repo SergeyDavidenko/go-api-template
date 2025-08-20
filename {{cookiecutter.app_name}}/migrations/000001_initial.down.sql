@@ -1,0 +1,3 @@
+-- Initial migration rollback
+-- This file is intentionally empty
+-- Add your rollback statements here

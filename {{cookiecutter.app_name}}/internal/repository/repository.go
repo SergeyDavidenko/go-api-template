@@ -7,10 +7,13 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	"github.com/golang-migrate/migrate/v4"
+	mpostgres "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	{% endif %}
 	{% if cookiecutter.db_type == "mongodb" %}
 	"go.mongodb.org/mongo-driver/mongo"
-	"context"
+	"go.mongodb.org/mongo-driver/mongo/readpref"
 	{% endif %}
 )
 
@@ -60,10 +63,39 @@ func New(cfg *config.Config) (*DB, error) {
 
 func (db *DB) Migrations(path string) error {
 	{% if cookiecutter.db_type == "postgres" %}
-	err := db.pg.AutoMigrate()
+	// Get underlying sql.DB from GORM
+	sqlDB, err := db.pg.DB()
 	if err != nil {
+		logrus.Error("Failed to get underlying sql.DB")
 		return err
 	}
+	
+	// Create postgres driver instance
+	driver, err := mpostgres.WithInstance(sqlDB, &mpostgres.Config{})
+	if err != nil {
+		logrus.Error("Failed to create postgres driver")
+		return err
+	}
+	
+	// Create migrate instance
+	m, err := migrate.NewWithDatabaseInstance(
+		"file://"+path,
+		"postgres", 
+		driver,
+	)
+	if err != nil {
+		logrus.Error("Failed to create migrate instance")
+		return err
+	}
+	defer m.Close()
+	
+	// Run migrations
+	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
+		logrus.Error("Failed to run migrations")
+		return err
+	}
+	
+	logrus.Info("Database migrations completed successfully")
 	{% endif %}
 	logrus.Info("migrations done")
 	return nil

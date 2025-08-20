@@ -1,0 +1,3 @@
+-- Initial migration
+-- This file is intentionally empty
+-- Add your database schema changes here
